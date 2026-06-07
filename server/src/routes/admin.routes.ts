@@ -19,7 +19,7 @@ router.post("/premios", adminController.savePremio);
 router.get("/config", adminController.getConfig);
 router.put("/config", adminController.updateConfig);
 router.put("/jogos/:id/placar", jogoController.updatePlacar);
-router.get("/audit-log", adminController.getAuditLogs);
+router.get("/logs", adminController.getAuditLogs);
 
 export default router;
 

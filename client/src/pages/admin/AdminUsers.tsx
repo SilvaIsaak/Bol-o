@@ -10,6 +10,8 @@ interface User {
   matricula: string;
   status: string;
   role: string;
+  pix?: string;
+  whatsapp?: string;
 }
 
 const AdminUsers: React.FC = () => {
@@ -107,6 +109,8 @@ const AdminUsers: React.FC = () => {
               <tr className="border-b border-white/5 bg-white/2">
                 <th className="px-8 py-6 text-gold font-black uppercase text-[10px] tracking-[0.2em]">Participante</th>
                 <th className="px-8 py-6 text-gold font-black uppercase text-[10px] tracking-[0.2em]">Matrícula</th>
+                <th className="px-8 py-6 text-gold font-black uppercase text-[10px] tracking-[0.2em]">WhatsApp</th>
+                <th className="px-8 py-6 text-gold font-black uppercase text-[10px] tracking-[0.2em]">Pix</th>
                 <th className="px-8 py-6 text-gold font-black uppercase text-[10px] tracking-[0.2em]">Status</th>
                 <th className="px-8 py-6 text-gold font-black uppercase text-[10px] tracking-[0.2em] text-right">Ações</th>
               </tr>
@@ -121,6 +125,12 @@ const AdminUsers: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-4 sm:px-6 lg:px-8 py-6 text-gray-400 font-mono text-xs tracking-widest">{rowUser.matricula}</td>
+                  <td className="px-4 sm:px-6 lg:px-8 py-6 text-gray-400 text-xs tracking-widest">
+                    {rowUser.whatsapp || <span className="text-gray-600 italic">Não informado</span>}
+                  </td>
+                  <td className="px-4 sm:px-6 lg:px-8 py-6 text-gray-400 text-xs tracking-widest">
+                    {rowUser.pix || <span className="text-gray-600 italic">Não informado</span>}
+                  </td>
                   <td className="px-4 sm:px-6 lg:px-8 py-6">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest ${
                       rowUser.status === 'ATIVO' ? 'bg-green-500/10 text-green-500' : 
@@ -166,7 +176,7 @@ const AdminUsers: React.FC = () => {
               ))}
               {filteredUsers.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-8 py-12 text-center text-gray-600 font-display italic">
+                  <td colSpan={6} className="px-8 py-12 text-center text-gray-600 font-display italic">
                     Nenhum participante encontrado com estes critérios.
                   </td>
                 </tr>

@@ -38,7 +38,9 @@ app.use(cookieParser());
 // Rate Limiting
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5000, // 5000 requests per window
+  max: 10000, // 10,000 requests per window (mais amplo)
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     success: false,
     message: "Muitas requisições, tente novamente mais tarde.",
@@ -47,7 +49,9 @@ const generalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 500, // 500 requests per window for auth
+  max: 20, // 20 tentativas de auth por 15 minutos (seguro contra brute force)
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     success: false,
     message: "Muitas tentativas de login, tente novamente em 15 minutos.",
