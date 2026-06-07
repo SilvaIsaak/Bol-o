@@ -246,7 +246,7 @@ export const refresh = async (req: Request, res: Response) => {
   }
 };
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (_req: Request, res: Response) => {
   res.clearCookie('access_token');
   res.clearCookie('refresh_token');
   res.json({ success: true, message: 'Logout realizado com sucesso' });
