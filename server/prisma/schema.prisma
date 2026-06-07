@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  PENDENTE_PAGAMENTO
+  AGUARDANDO_APROVACAO
+  ATIVO
+  BLOQUEADO
+}
+
+enum PaymentStatus {
+  PENDENTE
+  EM_ANALISE
+  APROVADO
+  REJEITADO
+}
+
+enum PrizeType {
+  DINHEIRO
+  OBJETO
+}
+
+enum GameStatus {
+  SCHEDULED
+  LIVE
+  FINISHED
+}
+
+model User {
+  id            String      @id @default(uuid())
+  nome          String
+  email         String      @unique
+  whatsapp      String      // Obrigatório conforme nova revisão
+  cpf           String      @unique // Obrigatório conforme nova revisão
+  pix           String?
+  senha_hash    String
+  matricula     String      @unique // BP2026-XXXXX
+  status        Status      @default(PENDENTE_PAGAMENTO)
+  role          Role        @default(USER)
+  login_attempts Int        @default(0)
+  blocked_until DateTime?
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  campeao_aposta    String?
+  artilheiro_aposta String?
+
+  palpites      Palpite[]
+  pagamentos    Pagamento[]
+  audit_logs    AuditLog[]
+}
+
+model Jogo {
+  id             String     @id @default(uuid())
+  api_id         Int?       @unique
+  time_casa      String
+  time_fora      String
+  data_hora      DateTime
+  fase           String
+  placar_casa    Int?
+  placar_fora    Int?
+  status         GameStatus @default(SCHEDULED)
+  is_brazil_game Boolean    @default(false) // Flag para destaque
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+
+  palpites     Palpite[]
+
+  @@index([is_brazil_game])
+  @@index([data_hora])
+}
+
+model Palpite {
+  id           String   @id @default(uuid())
+  user_id      String
+  jogo_id      String
+  palpite_casa Int      @default(0)
+  palpite_fora Int      @default(0)
+  pontos       Int      @default(0)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  user         User     @relation(fields: [user_id], references: [id])
+  jogo         Jogo     @relation(fields: [jogo_id], references: [id])
+
+  @@unique([user_id, jogo_id])
+}
+
+model Premio {
+  id               String    @id @default(uuid())
+  descricao        String
+  tipo             PrizeType @default(DINHEIRO)
+  percentual       Float?    // Para prêmios em dinheiro
+  valor_calculado  Float     @default(0)
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+}
+
+model Pagamento {
+  id              String        @id @default(uuid())
+  user_id         String
+  status          PaymentStatus @default(PENDENTE)
+  comprovante_url String?
+  valor           Float         @default(70.0) // Valor registrado no ato
+  metodo          String        @default("PIX")
+  pixCode         String?       // Adicionado conforme novo fluxo
+  qrCode          String?       // Adicionado conforme novo fluxo
+  approvedBy      String?
+  approvedAt      DateTime?
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+
+  user            User          @relation(fields: [user_id], references: [id])
+}
+
+model GlobalConfig {
+  id                Int      @id @default(1)
+  valor_inscricao   Float    @default(70.0)
+  custo_operacional Float    @default(0.0) // Valor fixo para descontar da arrecadação
+  api_competition_id String  @default("WC")
+  updated_at        DateTime @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  user_id     String?  // Admin ou Usuário
+  acao        String
+  entidade    String
+  entidade_id String
+  payload     Json?    // Estado anterior/novo
+  ip_address  String?
+  created_at  DateTime @default(now())
+
+  user        User?    @relation(fields: [user_id], references: [id])
+}

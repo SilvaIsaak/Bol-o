@@ -1,0 +1,16 @@
+{
+  "name": "bolao-2026",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm --prefix client run dev\" \"npm --prefix server run dev\"", 
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "build": "npm --prefix client run build && npm --prefix server run build",
+    "test": "npm --prefix server run test",
+    "install:all": "npm install --prefix client && npm install --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

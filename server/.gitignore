@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+*.pnp
+.pnp.js
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Prisma
+prisma/migrations/
+
+# OS
+Thumbs.db
