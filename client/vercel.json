@@ -4,6 +4,6 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "env": {
-    "VITE_API_URL": "https://SEU-SERVER-VERCEL.vercel.app/api"
+    "VITE_API_URL": "https://bolao-backend-6plbg2n58-silvaisaak50-7302s-projects.vercel.app/api"
   }
 }

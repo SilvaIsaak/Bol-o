@@ -1,4 +1,5 @@
 import cron from 'node-cron';
+import type { Prisma } from '@prisma/client';
 import prisma from '../utils/prisma.js';
 import { fetchFinishedGames } from '../services/footballApi.service.js';
 import { translateTeamToInternal } from '../services/teamMapping.service.js';
@@ -31,7 +32,7 @@ export const syncGames = () => {
           if (internalGame) {
             console.log(`✅ Atualizando placar: ${internalGame.time_casa} ${homeScore} x ${awayScore} ${internalGame.time_fora}`);
             
-            await prisma.$transaction(async (tx) => {
+            await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
               // 1. Atualiza o jogo
               await tx.jogo.update({
                 where: { id: internalGame.id },
